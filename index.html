@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Qdoba Tools — Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f5f4f0;
+      --surface: #ffffff;
+      --border: #e2e0d9;
+      --text-primary: #1a1916;
+      --text-secondary: #6b6860;
+      --accent: #2563eb;
+      --accent-light: #eff4ff;
+      --accent-hover: #1d4ed8;
+      --tag-bg: #f0efe9;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+      --shadow-hover: 0 4px 12px rgba(0,0,0,0.1), 0 12px 32px rgba(0,0,0,0.07);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 18px;
+      height: 18px;
+      color: white;
+    }
+
+    .logo-text {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .logo-sub {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .github-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      transition: all 0.15s;
+      font-weight: 500;
+    }
+
+    .github-link:hover {
+      background: var(--surface);
+      color: var(--text-primary);
+      border-color: #c8c6be;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 32px 32px;
+    }
+
+    .hero h1 {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px 24px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* ── Grid ── */
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 32px 64px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
+      border-color: #d0cec7;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--accent);
+    }
+
+    .card-arrow {
+      color: var(--text-secondary);
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .card:hover .card-arrow {
+      opacity: 1;
+      transform: translate(2px, -2px);
+    }
+
+    .card-body { flex: 1; }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 5px;
+      color: var(--text-primary);
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 4px;
+      background: var(--tag-bg);
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+    }
+
+    .card-tag.labor   { background: #ecfdf5; color: #065f46; }
+    .card-tag.deploy  { background: #eff6ff; color: #1e40af; }
+    .card-tag.finance { background: #fefce8; color: #854d0e; }
+    .card-tag.hr      { background: #fdf4ff; color: #7e22ce; }
+
+    .card-repo {
+      font-size: 11px;
+      color: #b0ae a6;
+      color: var(--text-secondary);
+      opacity: 0.6;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 20px 32px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── Hidden card ── */
+    .card.hidden { display: none; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 22px; }
+      .grid { grid-template-columns: 1fr; }
+      header { padding: 0 16px; }
+      .hero, .filter-bar, .grid { padding-left: 16px; padding-right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="logo-text">Qdoba Tools</div>
+        <div class="logo-sub">Calculator Dashboard</div>
+      </div>
+    </a>
+    <div class="header-right">
+      <a class="github-link" href="https://github.com/qdobastuff" target="_blank">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        @qdobastuff
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>All Tools, One Place</h1>
+  <p>10 calculators and dashboards — click any card to open it.</p>
+</div>
+
+<!-- Filter -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all" onclick="filter(this,'all')">All</button>
+  <button class="filter-btn" data-filter="labor" onclick="filter(this,'labor')">Labor</button>
+  <button class="filter-btn" data-filter="deploy" onclick="filter(this,'deploy')">Deployment</button>
+  <button class="filter-btn" data-filter="finance" onclick="filter(this,'finance')">Finance</button>
+  <button class="filter-btn" data-filter="hr" onclick="filter(this,'hr')">HR & Interviews</button>
+</div>
+
+<!-- Grid -->
+<div class="grid" id="grid">
+
+  <a class="card" href="https://qdobastuff.github.io/Labor-Calculator" target="_blank" data-cat="labor">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 11h.01M12 11h.01M15 11h.01M4 19h16a2 2 0 002-2V7a2 2 0 00-2-2H4a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Labor Calculator</div>
+      <div class="card-desc">Calculate labor costs, hours, and workforce expenses quickly.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag labor">Labor</span>
+      <span class="card-repo">Labor-Calculator</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/Labor-Dashboard" target="_blank" data-cat="labor">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h8M4 18h8"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Labor Dashboard</div>
+      <div class="card-desc">Visual overview of labor data, metrics, and workforce summaries.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag labor">Labor</span>
+      <span class="card-repo">Labor-Dashboard</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/Labor-Tracker" target="_blank" data-cat="labor">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Labor Tracker</div>
+      <div class="card-desc">Track employee hours and shifts over time.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag labor">Labor</span>
+      <span class="card-repo">Labor-Tracker</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/LaborTracker" target="_blank" data-cat="labor">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Labor Tracker (v2)</div>
+      <div class="card-desc">Updated labor tracking tool with enhanced features.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag labor">Labor</span>
+      <span class="card-repo">LaborTracker</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/Deployment" target="_blank" data-cat="deploy">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Deployment</div>
+      <div class="card-desc">Deployment planning and resource allocation tool.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag deploy">Deployment</span>
+      <span class="card-repo">Deployment</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/Deployment-chart" target="_blank" data-cat="deploy">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Deployment Chart</div>
+      <div class="card-desc">Visual chart for tracking deployment schedules and status.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag deploy">Deployment</span>
+      <span class="card-repo">Deployment-chart</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/SmgCalculator" target="_blank" data-cat="finance">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">SMG Calculator</div>
+      <div class="card-desc">Sales, margins, or general SMG metric calculations.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag finance">Finance</span>
+      <span class="card-repo">SmgCalculator</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/Jimsmg" target="_blank" data-cat="finance">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Jim SMG</div>
+      <div class="card-desc">Jim's personalized SMG tracking and reporting tool.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag finance">Finance</span>
+      <span class="card-repo">Jimsmg</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/Tips" target="_blank" data-cat="finance">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Tips Calculator</div>
+      <div class="card-desc">Calculate and distribute tips across staff members.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag finance">Finance</span>
+      <span class="card-repo">Tips</span>
+    </div>
+  </a>
+
+  <a class="card" href="https://qdobastuff.github.io/Interview" target="_blank" data-cat="hr">
+    <div class="card-top">
+      <div class="card-icon">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+        </svg>
+      </div>
+      <svg class="card-arrow" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17L17 7M17 7H7M17 7v10"/>
+      </svg>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Interview Tool</div>
+      <div class="card-desc">Interview scoring, notes, and candidate evaluation helper.</div>
+    </div>
+    <div class="card-footer">
+      <span class="card-tag hr">HR</span>
+      <span class="card-repo">Interview</span>
+    </div>
+  </a>
+
+</div>
+
+<!-- Footer -->
+<footer>
+  Built with GitHub Pages &nbsp;·&nbsp; <a href="https://github.com/qdobastuff" target="_blank">github.com/qdobastuff</a>
+</footer>
+
+<script>
+  function filter(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
